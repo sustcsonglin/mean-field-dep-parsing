@@ -1,0 +1,30 @@
+# @package _global_
+defaults:
+  - _base
+
+datamodule:
+  target:
+    _target_: src.datamodule.sdp_data.SDPData_multiple
+  train: "${root}/data/DM/train.conllu"
+  dev: "${root}/data/DM/dev.conllu"
+  test_id: "${root}/data/DM/test.conllu"
+  test_ood: "${root}/data/DM_OOD/test.conllu"
+  cache: "${root}/data/DM/dm.pickle"
+  cache_bert: "${root}/data/DM/dm.cache_${datamodule.bert}"
+  bert: 'bert-base-cased'
+  use_pos: True
+  use_lemma: True
+  use_char: False
+  use_word: False
+  use_emb: False
+  name: 'dm_uselemma_${datamodule.use_lemma}_usechar_${datamodule.use_char}_epoch_${trainer.max_epochs}'
+
+runner:
+    _target_: src.runner.multiple_test.Runner
+
+model:
+  metric:
+    target:
+      _target_: src.model.metric.SDPMetric2
+    write_result_to_file: True
+

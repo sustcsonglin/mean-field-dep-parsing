@@ -1,0 +1,33 @@
+# @package _global_
+defaults:
+  - _base
+
+datamodule:
+  target:
+    _target_: src.datamodule.sdp_data.SDPData_multiple
+  train: "${root}/data/PAS/train.conllu"
+  dev: "${root}/data/PAS/dev.conllu"
+  test_id: "${root}/data/PAS/test.conllu"
+  test_ood: "${root}/data/PAS_OOD/test.conllu"
+  cache: "${root}/data/PAS/pas.pickle"
+  cache_bert: "${root}/data/PAS/pas.cache_${datamodule.bert}"
+  bert: 'bert-base-cased'
+  use_pos: True
+  use_lemma: True
+  use_char: False
+  use_word: False
+  use_emb: False
+  name: 'pas_uselemma_${datamodule.use_lemma}_usechar_${datamodule.use_char}_epoch_${trainer.max_epochs}'
+
+
+runner:
+    _target_: src.runner.multiple_test.Runner
+
+model:
+  metric:
+    target:
+      _target_: src.model.metric.SDPMetric2
+    write_result_to_file: True
+
+
+
