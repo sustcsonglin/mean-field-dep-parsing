@@ -1,0 +1,27 @@
+# @package _global_
+
+defaults:
+  - _base
+
+model:
+  scorer:
+    target:
+      _target_: src.model.module.scorer.dp_scorer.CPD_SecondOrderDPScorer
+    rank: 300
+    n_mlp_rel: 300
+    n_mlp_sib: 300
+    scaling: False
+
+  loss:
+    target:
+      _target_: src.loss.dp_loss.CPD_MFLoss
+    max_iter: 2
+    loss_type: mm
+    decode_type: eisner
+
+  name: 'cpd_dp_rank_${model.scorer.rank}_loss_${model.loss.loss_type}'
+
+
+
+
+

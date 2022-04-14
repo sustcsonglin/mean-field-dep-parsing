@@ -1,0 +1,29 @@
+# @package _global_
+
+defaults:
+  - _base
+
+model:
+  scorer:
+    target:
+      _target_: src.model.module.scorer.dp_scorer.MF_SecondOrderDPScorer
+    rank: 300
+    n_mlp_rel: 300
+    n_mlp_arc: 600
+    n_mlp_sib: 300
+    scaling: False
+
+  loss:
+    target:
+      _target_: src.loss.dp_loss.MFLoss
+    max_iter: 2
+
+  name: 'mf_dp_rank_${model.scorer.rank}'
+
+
+
+
+
+
+
+

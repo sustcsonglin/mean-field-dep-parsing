@@ -1,8 +1,6 @@
 # @package _global_
 
 datamodule:
-  target:
-    _target_: src.datamodule.dep_pointer_data.DepData
   use_char: False
   use_bert: True
   use_pos: False
