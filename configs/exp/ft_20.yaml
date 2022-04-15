@@ -26,6 +26,9 @@ model:
 
 optim:
   only_embeder: True
+  warmup: 0.5
+
+
 
 
 

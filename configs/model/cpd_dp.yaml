@@ -12,6 +12,9 @@ model:
     n_mlp_sib: 300
     scaling: False
 
+  encoder:
+    n_lstm_layers: 1
+
   loss:
     target:
       _target_: src.loss.dp_loss.CPD_MFLoss
@@ -20,8 +23,5 @@ model:
     decode_type: eisner
 
   name: 'cpd_dp_rank_${model.scorer.rank}_loss_${model.loss.loss_type}'
-
-
-
 
 

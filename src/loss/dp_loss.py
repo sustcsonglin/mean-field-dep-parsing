@@ -21,7 +21,6 @@ class CPD_MFLoss():
         marginal_logits = self.inference(ctx, max_iter=self.conf.max_iter)
         # max-margin loss. Projective parsing only.
         if self.conf.loss_type == 'mm':
-            marginal_logits = marginal_logits - marginal_logits[..., 0:1]
 
             with torch.no_grad():
                 s_rel = marginal_logits.clone()
@@ -42,6 +41,7 @@ class CPD_MFLoss():
 
     def decode(self, ctx):
         s_rel = CPDLabeledMFI(ctx, max_iter=self.conf.max_iter)
+        # mask out the <null> label.
         s_arc, s_rel_idx = s_rel.max(-1)
         ctx['s_arc'] = s_arc.transpose(1, 2)
         seq_len = ctx['seq_len']
@@ -244,6 +244,7 @@ def eisner(ctx, decode=False, max_margin=False):
 
     scores = ctx['s_arc']
     lens = ctx['seq_len']
+
     if decode or max_margin:
         scores_origin = scores.detach().clone().requires_grad_(True)
         assert scores_origin.requires_grad

@@ -1,0 +1,33 @@
+
+# @package _global_
+defaults:
+  - /optim: exponential
+
+trainer:
+  min_epochs: 1
+  max_epochs: 200
+
+
+accumulation: 2
+
+datamodule:
+  max_tokens: 2500
+  max_tokens_test: 3000
+  use_bert: False
+  use_word: True
+  use_char: True
+  use_emb: False
+  max_len: 100
+
+# save checkpoints of the model.
+checkpoint: False
+
+callbacks:
+  pretty_progress_bar:
+    _target_: src.callbacks.progressbar.PrettyProgressBar
+    refresh_rate: 1
+    process_position: 0
+
+
+
+
