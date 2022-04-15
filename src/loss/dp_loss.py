@@ -93,7 +93,7 @@ class MFLoss():
         if self.conf.loss_type == 'mm':
             with torch.no_grad():
                 s_arc = marginal_logits.clone()
-                s_arc[gold_rel[:, 0], gold_rel[:, 2], gold_head[:, 1]] -= 1
+                s_arc[gold_head[:, 0], gold_head[:, 2], gold_head[:, 1]] -= 1
                 ctx['s_arc'] = s_arc.transpose(1, 2)
                 arc = eisner(ctx, max_margin=True)
             mm_score = marginal_logits[arc[:, 0], arc[:, 2], arc[:, 1]].sum()
@@ -237,6 +237,7 @@ def MFI(ctx, max_iter):
                 + torch.einsum('nar, nbr, ncr, nbc -> nab', s_grd1_a, s_grd1_b, s_grd1_c, q) \
                 + torch.einsum('nar, nbr, ncr, nab -> nbc', s_grd2_a, s_grd2_b, s_grd2_c, q)
         q = q_new
+
     return q
 
 @torch.enable_grad()
