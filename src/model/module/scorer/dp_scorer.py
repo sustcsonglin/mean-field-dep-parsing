@@ -40,9 +40,9 @@ class CPD_SecondOrderDPScorer(nn.Module):
         ctx['s_grd2_a'], ctx['s_grd2_b'], ctx['s_grd2_c'], ctx['s_grd2_l1'], ctx['s_grd2_l2'] = self.grd_scorer2(x, self.label)
 
 
-class MF_SecondOrderSDPScorer(nn.Module):
+class MF_SecondOrderDPScorer(nn.Module):
     def __init__(self, conf, fields, input_dim):
-        super(MF_SecondOrderSDPScorer, self).__init__()
+        super(MF_SecondOrderDPScorer, self).__init__()
         self.conf = conf
 
         self.rel_scorer = BiaffineScorer(n_in=input_dim, n_out=conf.n_mlp_rel, bias_x=True, bias_y=True,
@@ -50,7 +50,7 @@ class MF_SecondOrderSDPScorer(nn.Module):
                                          scaling=conf.scaling)
 
         self.arc_scorer = BiaffineScorer(n_in=input_dim, n_out=conf.n_mlp_arc, bias_x=True, bias_y=True,
-                                         dropout=conf.mlp_dropout, n_out_label=fields.get_vocab_size("rel"),
+                                         dropout=conf.mlp_dropout,
                                          scaling=conf.scaling)
 
         self.sib_scorer = DecomposedTriAffineScorer(n_in=input_dim, n_out=conf.n_mlp_rel,
@@ -70,8 +70,9 @@ class MF_SecondOrderSDPScorer(nn.Module):
         x = ctx['encoded_emb'][:, :-1]
         ctx['s_rel'] =  self.rel_scorer(x)
         ctx['s_arc'] = self.arc_scorer(x)
-        ctx['s_sib_a'], ctx['s_sib_b'], ctx['s_sib_c'] = self.sib_scorer(x, self.label)
+        ctx['s_sib_a'], ctx['s_sib_b'], ctx['s_sib_c'] = self.sib_scorer(x)
         # ctx['s_cop_a'], ctx['s_cop_b'], ctx['s_cop_c'] = self.cop_scorer(x, self.label)
-        ctx['s_grd_a'], ctx['s_grd_b'], ctx['s_grd_c'] = self.grd_scorer(x, self.label)
-        ctx['s_grd2_a'], ctx['s_grd2_b'], ctx['s_grd2_c'] = self.grd_scorer2(x, self.label)
+        ctx['s_grd1_a'], ctx['s_grd1_b'], ctx['s_grd1_c'] = self.grd_scorer(x)
+        ctx['s_grd2_a'], ctx['s_grd2_b'], ctx['s_grd2_c'] = self.grd_scorer2(x)
+
 

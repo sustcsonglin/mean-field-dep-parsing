@@ -17,6 +17,8 @@ model:
     target:
       _target_: src.loss.dp_loss.MFLoss
     max_iter: 2
+    loss_type: mm
+    decode_type: eisner
 
   name: 'mf_dp_rank_${model.scorer.rank}'
 
